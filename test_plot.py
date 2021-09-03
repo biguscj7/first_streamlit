@@ -1,12 +1,12 @@
 import streamlit as st
 import pandas as pd
 
-annual_income = st.sidebar.number_input('Annual Retirement income', value=55000)
+annual_income = st.sidebar.number_input('Annual Retirement income', value=55000, format='%03d')
 payout_duration = st.sidebar.number_input("Payout duration (yrs)", value=40)
-policy_value = st.sidebar.number_input("Policy value", value=800000)
+policy_value = st.sidebar.number_input("Policy value", value=800000, format='%03d')
 ror = st.sidebar.number_input("Rate of return", value=5)
-cpi = st.sidebar.slider("Consumer Price Index growth", min_value=0.0, max_value=10.0, step=0.1, value=1.5)
-inflation = st.sidebar.slider("Annual inflation rate", min_value=0.0, max_value=10.0, step=0.1, value=2.1)
+cpi = st.sidebar.slider("Consumer Price Index growth", min_value=0.0, max_value=10.0, step=0.1, value=1.5, format='%.1f')
+inflation = st.sidebar.slider("Annual inflation rate", min_value=0.0, max_value=10.0, step=0.1, value=2.1, format='%.1f')
 
 balance = policy_value
 balance_list = [balance]
@@ -24,10 +24,10 @@ df = pd.DataFrame(
     {'Calendar year': [str(x + 2021) for x in range(payout_duration + 10)],
      'Balance': balance_list,
      'SBP Payment': sbp_list}
-
 )
 
 sw_df = df.set_index('Calendar year')
 
 st.line_chart(sw_df)
+df['Balance'] = df['Balance'].apply(lambda x:f"${x:.2f}")
 st.table(sw_df)
