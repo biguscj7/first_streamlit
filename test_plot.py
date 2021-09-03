@@ -4,7 +4,7 @@ import pandas as pd
 annual_income = st.sidebar.number_input('Annual Retirement income', value=55000, format='%03d')
 payout_duration = st.sidebar.number_input("Payout duration (yrs)", value=40)
 policy_value = st.sidebar.number_input("Policy value", value=800000, format='%03d')
-ror = st.sidebar.number_input("Rate of return", value=5)
+ror = st.sidebar.slider("Rate of return", min_value=0.0, max_value=12.0, value=5.0, step=0.25, format='%.2f')
 cpi = st.sidebar.slider("Consumer Price Index growth", min_value=0.0, max_value=10.0, step=0.1, value=1.5, format='%.1f')
 inflation = st.sidebar.slider("Annual inflation rate", min_value=0.0, max_value=10.0, step=0.1, value=2.1, format='%.1f')
 
@@ -29,5 +29,4 @@ df = pd.DataFrame(
 sw_df = df.set_index('Calendar year')
 
 st.line_chart(sw_df)
-df['Balance'] = df['Balance'].apply(lambda x:f"${x:.2f}")
-st.table(sw_df)
+st.table(sw_df.style.format("${:,.0f}"))
